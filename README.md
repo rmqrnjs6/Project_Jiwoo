@@ -1,213 +1,360 @@
 # AI Judgment System
 
 > **완벽을 증명하는 시스템이 아니라, 변화할 수 있음을 증명하는 시스템.**
+>
 > **행위 권한 없는 지능은 결국 조언에 머문다.**
 
-AI가 사용자의 입력과 근거(Evidence)를 기반으로 현재의 판단을 형성하고, <br>
-새로운 근거가 등장하면 기존 판단을 다시 검토하며 그 변화 과정을 보존하는 실험적 판단 시스템입니다.
+AI Judgment System은 사용자의 입력과 근거(Evidence)를 바탕으로 **현재의 판단**을 만들고,  
+새로운 근거나 조건이 생기면 기존 판단을 다시 검토하며, **왜 판단이 유지되거나 바뀌었는지 기록하는 시스템**입니다.
 
-현재 프로젝트는 **Private Development** 단계입니다.
+현재 버전은 **`1.0.0-rc1` (Release Candidate)** 입니다.
 
 ---
 
-## 1. Project Overview
+## 이 프로젝트가 하려는 것
 
-일반적인 AI 시스템은 질문을 받고 하나의 답변을 생성하는 데 집중합니다.
+일반적인 AI 답변은 한 번 생성되고 끝나는 경우가 많습니다.
 
-이 프로젝트는 그보다 다음 문제에 초점을 맞춥니다.
+이 프로젝트는 다음 질문에서 시작했습니다.
 
-* AI의 판단은 시간이 지나도 항상 유효한가?
-* 더 신뢰할 수 있는 새로운 근거가 등장하면 어떻게 해야 하는가?
-* 기존 판단이 틀렸다면 이전 기록을 지워야 하는가?
-* AI가 어떤 행동이 필요하다고 판단해도 실행 권한이 없다면?
-* 판단할 수 없는 문제는 억지로 결론 내야 하는가?
-* 판단이 바뀌지 않았더라도 재검토했다는 사실은 어떻게 기록해야 하는가?
+- AI의 판단이 나중에도 항상 맞다고 할 수 있는가?
+- 더 좋은 근거가 생기면 기존 판단을 바꿀 수 있어야 하지 않는가?
+- 확실하지 않으면 억지로 결론을 내리지 않고 기다릴 수 있는가?
+- 판단은 가능해도 실제 행동 권한이 없다면 멈춰야 하지 않는가?
+- 판단이 바뀌었다면 왜 바뀌었는지 확인할 수 있어야 하지 않는가?
+- 아무것도 바뀌지 않았는데 굳이 유료 AI를 다시 호출해야 하는가?
 
-AI Judgment System은 이를 다음 구조로 다룹니다.
+이를 다음 흐름으로 구현했습니다.
 
 ```text
-INPUT
-  ↓
-EVIDENCE
-  ↓
-RELIABILITY ASSESSMENT
-  ↓
-JUDGMENT
-  ↓
-PERMISSION
-  ↓
-ACTION
+사용자 입력
+   ↓
+Evidence
+   ↓
+신뢰도 평가
+   ↓
+AI Judgment
+   ↓
+Permission
+   ↓
+Action
 
-새로운 Evidence
-  ↓
-REEVALUATION
-  ↓
-기존 판단 유지 또는 수정
+새로운 Evidence / 출처 상태 변화 / 규칙 변화
+   ↓
+Reevaluation
+   ↓
+판단 유지 또는 수정
 
 전체 과정
-  ↓
-HISTORY
+   ↓
+History + Timeline
 ```
 
 ---
 
-## 2. Core Philosophy
+# 빠르게 테스트하기
 
-### Self-Corrective Growth
+## Windows
 
-AI의 성장을 단순히 더 많은 정보를 아는 것으로 정의하지 않습니다.
+Python 3.12 사용을 권장합니다.
 
-이 프로젝트에서의 성장은:
-
-> 자신의 판단을 절대화하지 않고, 더 나은 근거가 나타났을 때 기존 판단을 수정할 수 있는 능력
-
-을 의미합니다.
+테스터 패키지를 받은 경우 프로젝트 폴더의:
 
 ```text
-판단
-→ 새로운 근거
-→ 의심
-→ 재검토
-→ 유지 또는 수정
+START_WINDOWS.bat
 ```
 
----
+을 실행하면 됩니다.
 
-### Judgment Is Not Absolute Truth
-
-Judgment는 절대적인 진리 선언이 아닙니다.
-
-항상 다음 의미를 가집니다.
-
-> **현재 확보된 근거와 현재 평가 규칙을 기준으로 한 판단**
-
-따라서 Judgment는 시간이 지나면서 변경될 수 있습니다.
-
----
-
-### Intelligence ≠ Permission
-
-AI가 무엇을 해야 하는지 판단할 수 있다고 해서 실제 행동할 권한까지 가지는 것은 아닙니다.
+처음 실행할 때는 자동으로:
 
 ```text
-Judgment
-= 무엇을 해야 하는가
-
-Permission
-= 그것을 할 수 있는가
-
-Action
-= 실제로 무엇을 했는가
+가상환경 생성
+→ 필요한 Python 패키지 설치
+→ 로컬 서버 실행
 ```
 
-따라서:
+순서로 진행됩니다.
 
-> **행위 권한 없는 지능은 결국 조언에 머문다.**
-
----
-
-### History Preservation
-
-과거의 오류를 단순 삭제하지 않습니다.
-
-가능하면:
+서버가 켜지면 브라우저에서:
 
 ```text
-기존 판단
-↓
-새로운 근거
-↓
-오류 발견
-↓
-정정
-↓
-새로운 판단
+http://127.0.0.1:8000/
 ```
 
-이라는 변화 과정을 보존합니다.
+을 엽니다.
 
-과거가 완벽해서 가치 있는 것이 아니라,
-
-> **왜 그렇게 판단했고, 어디에서 틀렸으며, 어떻게 수정되었는지를 추적할 수 있기 때문에 가치가 있습니다.**
-
----
-
-## 3. Judgment States
-
-현재 Judgment는 다음 네 가지 결론을 사용합니다.
-
-| State                   | Meaning                     |
-| ----------------------- | --------------------------- |
-| `SUPPORTED`             | 현재 근거가 입력을 지지               |
-| `CONTRADICTED`          | 현재 근거가 입력과 충돌               |
-| `UNCERTAIN`             | 신뢰할 만한 근거가 서로 충돌하거나 판단이 불확실 |
-| `INSUFFICIENT_EVIDENCE` | 판단에 필요한 근거가 부족              |
-
-AI의 현재 입장은 다음과 같이 연결됩니다.
+서버 종료:
 
 ```text
-SUPPORTED
-→ AGREE
-
-CONTRADICTED
-→ DISAGREE
-
-UNCERTAIN
-→ UNSURE
-
-INSUFFICIENT_EVIDENCE
-→ UNSURE
+Ctrl + C
 ```
 
 ---
 
-## 4. Resolution State
+## 직접 실행하고 싶다면
 
-판단 결과와 별도로 문제의 현재 해결 상태를 관리합니다.
+```powershell
+cd backend
+
+python -m venv .venv
+
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+
+.\.venv\Scripts\python.exe -m uvicorn app.main:app --reload
+```
+
+브라우저:
+
+```text
+http://127.0.0.1:8000/
+```
+
+API 문서:
+
+```text
+http://127.0.0.1:8000/docs
+```
+
+---
+
+# 처음 테스트하는 순서
+
+처음이라면 아래 순서만 보면 됩니다.
+
+```text
+1. Case 만들기
+2. Evidence 추가
+3. 신뢰도 평가
+4. 출처 상태 확인
+5. AI 판단 (API Key가 있는 경우)
+6. 새 Evidence 추가
+7. 재판단
+8. Timeline 확인
+```
+
+### 간단한 예시
+
+Case:
+
+```text
+A 회사가 내년에 새로운 제품을 출시할 것이다.
+```
+
+첫 Evidence:
+
+```text
+A 회사는 아직 해당 제품의 출시를 공식 발표하지 않았다.
+```
+
+그다음 새 Evidence:
+
+```text
+A 회사가 공식 홈페이지에서 해당 제품 출시를 발표했다.
+```
+
+이렇게 넣으면 **새로운 근거가 들어왔을 때 판단과 Timeline이 어떻게 바뀌는지** 시험할 수 있습니다.
+
+더 자세한 초보자용 테스트 방법은:
+
+```text
+TEST_FIRST.md
+```
+
+를 참고하세요.
+
+---
+
+# OpenAI API 비용에 대해
+
+OpenAI API는 **선택 사항**입니다.
+
+API Key가 없어도 다음 기능은 로컬에서 사용할 수 있습니다.
+
+- Case 생성
+- Evidence 추가
+- 신뢰도 평가
+- 출처 상태 확인
+- History
+- Timeline
+- 중복 Evidence 검사
+- 입력 검증
+
+## 비용이 발생하지 않는 경우
+
+```text
+API Key를 환경변수에 넣기
+서버 실행
+브라우저 열기
+Case / Evidence 사용
+History / Timeline 조회
+```
+
+이 자체로는 OpenAI 모델 요청을 보내지 않습니다.
+
+## 비용이 발생할 수 있는 경우
+
+```text
+실제 AI Judgment 요청
+```
+
+처럼 OpenAI 모델 호출이 발생할 때입니다.
+
+프로젝트에는 불필요한 호출을 줄이기 위한 **Cost Guard**가 있습니다.
+
+```text
+입력 동일
+Evidence 동일
+신뢰도 동일
+출처 상태 동일
+규칙 동일
+모델 동일
+        ↓
+기존 Judgment 재사용
+        ↓
+새 AI 요청 생략
+```
+
+또한 AI 요청 전에 입력 크기와 Evidence 개수를 제한해 과도한 요청을 막습니다.
+
+---
+
+# 실제 AI Judgment 사용
+
+본인의 OpenAI API Key가 있는 경우에만 설정하세요.
+
+PowerShell:
+
+```powershell
+$env:OPENAI_API_KEY="본인의_API_Key"
+```
+
+그다음 서버를 다시 실행합니다.
+
+```powershell
+cd backend
+.\.venv\Scripts\python.exe -m uvicorn app.main:app --reload
+```
+
+> API Key를 README, 채팅, GitHub, 테스트 피드백 파일 등에 붙여넣지 마세요.
+
+테스트가 끝난 뒤 현재 PowerShell 세션에서 제거:
+
+```powershell
+Remove-Item Env:OPENAI_API_KEY
+```
+
+실제 AI 테스트에 대한 별도 안내:
+
+```text
+OPTIONAL_AI_TEST.md
+```
+
+---
+
+# 핵심 판단 상태
+
+## Conclusion
+
+| 상태 | 의미 |
+|---|---|
+| `SUPPORTED` | 현재 근거가 입력을 지지 |
+| `CONTRADICTED` | 현재 근거가 입력과 충돌 |
+| `UNCERTAIN` | 근거가 충돌하거나 판단이 불확실 |
+| `INSUFFICIENT_EVIDENCE` | 판단할 근거가 부족 |
+
+## Resolution
 
 ### `RESOLVED`
 
-현재 근거를 기준으로 판단 가능.
+현재 근거로 판단할 수 있음.
 
 ### `UNRESOLVED`
 
-현재 확보된 정보로 해결할 수 없음.
-
-예:
-
-```text
-신뢰도 높은 근거 A와 B가 서로 충돌
-```
+현재 자료로는 풀리지 않음.
 
 ### `PENDING`
 
-현재는 판단하기 어렵지만 무엇을 기다리는지가 명확함.
+지금은 결론을 내릴 수 없지만 **무엇을 기다리는지 명확함**.
 
 예:
 
 ```text
 공식 발표 대기
-추가 실험 결과 대기
-새로운 원본 문서 대기
+실험 결과 대기
+원본 문서 공개 대기
 ```
 
 즉:
 
 ```text
-UNRESOLVED
-= 현재로서는 풀리지 않음
-
-PENDING
-= 아직은 아님
+UNRESOLVED = 현재로서는 알기 어렵다
+PENDING    = 아직은 알 수 없다
 ```
 
 ---
 
-## 5. Evidence Reliability
+# 재판단
 
-Evidence의 신뢰도는 사용자 입력값 하나만으로 결정하지 않습니다.
+새로운 Evidence가 들어왔다고 기존 Judgment를 덮어쓰지 않습니다.
 
-현재 `metadata-v2` 평가 방식은 다음 요소를 사용합니다.
+```text
+Judgment #1
+   ↓
+새 Evidence
+   ↓
+Reevaluation
+   ↓
+Judgment #2
+```
+
+재검토 후 실제 판단이 달라졌다면:
+
+```text
+JUDGMENT_REVISED
+```
+
+판단이 그대로라면:
+
+```text
+JUDGMENT_REAFFIRMED
+```
+
+로 구분합니다.
+
+> **다시 생각했다는 것과 생각이 바뀌었다는 것은 서로 다른 사건입니다.**
+
+---
+
+# Evidence와 신뢰도
+
+사용자가:
+
+```text
+"이건 공식 1차 자료다."
+```
+
+라고 말한 것과 실제로 검증된 것은 구분합니다.
+
+```text
+claimed_source
+≠
+verified_source
+```
+
+현재 출처 검증 상태:
+
+```text
+UNVERIFIED
+PARTIALLY_VERIFIED
+VERIFIED
+DISPUTED
+INVALID
+```
+
+신뢰도 역시 사용자가 직접 입력한 값과 시스템 평가를 구분합니다.
+
+현재 Reliability 평가에는 다음 요소가 사용됩니다.
 
 ```text
 Authority
@@ -218,127 +365,51 @@ Corroboration
 Conflict Penalty
 ```
 
-예:
-
-```json
-{
-  "authority": 0.7,
-  "originality": 0.6,
-  "directness": 0.7,
-  "recency": 1.0,
-  "corroboration": 0.5,
-  "conflict_penalty": 0.0,
-  "final_score": 0.68
-}
-```
-
-### Claimed vs Verified
-
-사용자가:
-
-```text
-"이 자료는 공식 1차 자료다."
-```
-
-라고 주장했다고 해서 시스템이 즉시 사실로 확정하지 않습니다.
-
-```text
-claimed_source_type
-≠
-verified_source_type
-```
-
-Evidence는 기본적으로:
-
-```text
-UNVERIFIED
-```
-
-상태에서 시작할 수 있습니다.
-
-사용자가 직접 입력한 신뢰도 역시:
-
-```text
-USER_PROVIDED
-```
-
-로 출처가 명시됩니다.
+신뢰도 점수는 **절대적인 진실 확률이 아닙니다.**  
+현재 시스템이 확보한 정보와 평가 규칙을 기준으로 한 값입니다.
 
 ---
 
-## 6. Reevaluation
+# 판단과 행동은 다릅니다
 
-새로운 Evidence가 추가되거나 재검토가 요청되면 기존 Judgment를 덮어쓰지 않고 새로운 revision을 생성합니다.
-
-```text
-Judgment #1
-↓
-New Evidence
-↓
-Reevaluation
-↓
-Judgment #2
-```
-
-판단이 실제로 변경되었다면:
+AI가 어떤 행동이 적절하다고 판단했다고 해서 바로 실행하지 않습니다.
 
 ```text
-JUDGMENT_REVISED
+Judgment
+= 무엇이 적절한가?
+
+Permission
+= 행동할 권한이 있는가?
+
+Action
+= 실제로 무엇을 했는가?
 ```
 
-판단이 동일하게 유지되었다면:
+실행 전에는 다음을 확인합니다.
 
 ```text
-JUDGMENT_REAFFIRMED
+최신 Judgment인가?
+↓
+RESOLVED 상태인가?
+↓
+실행 권한이 있는가?
+↓
+허용된 Action인가?
+↓
+입력값이 유효한가?
+↓
+실행
 ```
 
-로 기록합니다.
-
-따라서:
-
-> **재판단했다는 사실과 판단이 바뀌었다는 사실은 서로 다릅니다.**
+오래된 Judgment를 기반으로 한 실행도 차단합니다.
 
 ---
 
-## 7. Permission & Action
+# History와 Timeline
 
-Action은 Judgment만으로 실행되지 않습니다.
+## History
 
-현재 실행 전 다음 조건을 검사합니다.
-
-```text
-Latest Judgment?
-        ↓
-RESOLVED?
-        ↓
-Execution Permission?
-        ↓
-Allowed Scope?
-        ↓
-Valid Parameters?
-        ↓
-ACTION_COMPLETED
-```
-
-하나라도 실패하면:
-
-```text
-ACTION_BLOCKED
-```
-
-로 기록되며 실제 상태는 변경되지 않습니다.
-
-또한 오래된 Judgment를 근거로 한 Action도 차단합니다.
-
-```text
-STALE_JUDGMENT
-```
-
----
-
-## 8. History
-
-시스템 내부의 의미 있는 사건을 History로 보존합니다.
+시스템이 실제로 겪은 사건을 자세히 보존합니다.
 
 예:
 
@@ -351,276 +422,200 @@ RELIABILITY_ASSESSED
 RELIABILITY_REVISED
 RELIABILITY_REAFFIRMED
 
+SOURCE_VERIFICATION_ASSESSED
+SOURCE_VERIFICATION_REVISED
+SOURCE_VERIFICATION_REAFFIRMED
+
 JUDGMENT_CREATED
-REEVALUATION_STARTED
 JUDGMENT_REVISED
 JUDGMENT_REAFFIRMED
-REEVALUATION_COMPLETED
+JUDGMENT_FAILED
 
-PERMISSION_CHANGED
+REEVALUATION_STARTED
+REEVALUATION_COMPLETED
 
 ACTION_ATTEMPTED
 ACTION_BLOCKED
 ACTION_COMPLETED
-ACTION_FAILED
+
+AI_CALL_SKIPPED
 ```
 
-History는 단순 로그가 아니라:
+## Timeline
 
-> **입력 → 근거 → 판단 → 행동 → 재판단의 변화 경로**
+사람이 읽기 쉽도록 중요한 변화를 요약합니다.
 
-를 추적하기 위한 핵심 계층입니다.
+```text
+Raw History
+= 정확한 감사 기록
+
+Timeline
+= 사람이 이해하기 위한 기록
+```
 
 ---
 
-## 9. Contextual Support Experiment
+# Decision Snapshot
 
-향후 버전을 위한 실험적 구조도 일부 포함되어 있습니다.
+Judgment가 만들어질 때 **그 당시 AI가 무엇을 봤는지**도 보존합니다.
 
-텍스트에서 관찰 가능한 표현 신호를 기반으로:
+예:
 
-```text
-NONE
-SOFT
-EXPLICIT
-SAFETY
-```
+- 원본 입력
+- Evidence 내용
+- 당시 Reliability
+- 출처 검증 상태
+- 사용 모델
+- 판단 규칙 버전
+- 프롬프트 버전
 
-수준의 지원성 응답을 결정할 수 있습니다.
+따라서 나중에 데이터가 바뀌더라도:
 
-단, 특정 정신질환이나 성격 유형을 텍스트만으로 진단하는 구조는 목표로 하지 않습니다.
+> “그 당시에는 무엇을 보고 이런 판단을 했는가?”
 
-```text
-관찰 가능한 표현
-→ 판단 가능
-
-실제 정신 상태
-→ 확정하지 않음
-
-특정 질환 진단
-→ 생성하지 않음
-```
-
-연기, 창작, 역할극, 인용, 실제 경험 여부가 불명확한 경우에도 이를 고려합니다.
+를 추적할 수 있도록 설계했습니다.
 
 ---
 
-## 10. Release Profiles
+# 테스트 상태
 
-기능은 단계적으로 공개할 수 있도록 Release Lock 구조를 사용합니다.
+현재 Release Candidate에서 확인된 자동 테스트:
 
 ```text
-V1
-- Core Judgment
-- Reevaluation
-
-V1.5
-+ Permission
-+ Action
-
-V2
-+ Contextual Nudge
-+ Response Composer
-
-V2.5
-+ Explain Mode
-
-V3 / INTERNAL
-+ Extended capabilities
+67 passed
 ```
 
-현재 구조는 내부 개발 기능과 실제 공개 범위를 분리하기 위한 기반입니다.
-
----
-
-## 11. Tech Stack
-
-### Backend
-
-* Python
-* FastAPI
-* SQLAlchemy
-* Pydantic
-
-### Database
-
-Development:
-
-* SQLite
-
-Planned / Production-oriented:
-
-* PostgreSQL
-
-### AI
-
-* OpenAI API integration architecture
-
-실제 모델 호출 품질 검증은 현재 개발 진행 중입니다.
-
----
-
-## 12. Project Structure
+추가로 로컬에서 확인한 항목:
 
 ```text
-ai-judgment-system/
+GET /health        → 200
+GET /ready         → 200
+GET /system/status → 200
+GET /              → Browser UI 200
+Python compileall  → passed
+```
 
+중요:
+
+> `67 passed`는 **작성된 자동 테스트 67개가 통과했다는 뜻**입니다.  
+> 시스템이 절대적으로 틀리지 않는다는 뜻은 아닙니다.
+
+---
+
+# 아직 외부 환경에서 추가 검증이 필요한 것
+
+현재 RC에서는 다음을 “완료”라고 숨겨서 표시하지 않습니다.
+
+- 성공적인 실제 유료 OpenAI Judgment의 Release 검증
+- Docker가 설치된 환경에서의 실제 Compose 실행
+- PostgreSQL 컨테이너 통합 테스트
+- 대규모 실제 사용자 테스트
+- Semantic Evidence Cross-check 고도화
+- 강한 외부 출처 검증
+- 사용자 인증 / 소유권
+- 고부하 동시성 처리
+- Grace Period 자동화
+- 운영 모니터링
+
+이 항목들은 실제 사용 이후 개선 대상으로 남겨두었습니다.
+
+---
+
+# 테스터에게 부탁하고 싶은 것
+
+정상적인 사용만 하지 않아도 됩니다.
+
+오히려 다음처럼 시험해보세요.
+
+- 같은 Evidence를 두 번 넣기
+- 같은 버튼을 여러 번 누르기
+- 서로 반대되는 Evidence 넣기
+- 출처를 모르는 상태로 입력하기
+- 아무 변화가 없는데 다시 판단하기
+- 새로운 Evidence를 넣고 기존 판단이 어떻게 변하는지 보기
+
+이상한 결과가 나오면:
+
+```text
+TEST_FEEDBACK.md
+```
+
+에 적어주세요.
+
+버그인지 확신하지 못해도 괜찮습니다.
+
+> **사용자가 이상하다고 느낀 순간 자체가 중요한 테스트 데이터입니다.**
+
+---
+
+# 프로젝트 구조
+
+```text
+AI-Judgment-System/
 ├─ backend/
 │  ├─ app/
-│  │  ├─ main.py
-│  │  ├─ models.py
-│  │  ├─ schemas.py
-│  │  ├─ services.py
-│  │  └─ ...
-│  │
 │  ├─ tests/
-│  ├─ requirements.txt
-│  └─ .env.example
+│  ├─ scripts/
+│  └─ requirements.txt
+│
+├─ frontend/
+│  ├─ index.html
+│  ├─ app.js
+│  └─ styles.css
 │
 ├─ docs/
-│  ├─ ARCHITECTURE.md
-│  ├─ ROADMAP.md
-│  └─ ...
-│
-├─ .github/
-│  └─ workflows/
-│
 ├─ README.md
-├─ CHANGELOG.md
-├─ CONTRIBUTING.md
-└─ .gitignore
+├─ TEST_FIRST.md
+├─ TEST_FEEDBACK.md
+├─ OPTIONAL_AI_TEST.md
+├─ DEVELOPMENT_EXPERIENCE.md
+├─ SECURITY.md
+├─ Dockerfile
+└─ compose.yaml
 ```
 
 ---
 
-## 13. Local Development
+# 축적된 개발 경험
 
-### Requirements
-
-Recommended:
+이 프로젝트에서 실제로 발견한 문제와 수정 과정은:
 
 ```text
-Python 3.12.x
+DEVELOPMENT_EXPERIENCE.md
 ```
 
-### Windows PowerShell
+에 따로 정리했습니다.
 
-```powershell
-cd backend
+주요 경험:
 
-python -m venv .venv
-
-Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
-.\.venv\Scripts\Activate.ps1
-
-pip install -r requirements.txt
-
-python -m uvicorn app.main:app --reload
-```
-
-가상환경 활성화를 사용하지 않으려면:
-
-```powershell
-.\.venv\Scripts\python.exe -m pip install -r requirements.txt
-
-.\.venv\Scripts\python.exe -m uvicorn app.main:app --reload
-```
+- 판단과 진실을 구분해야 한다
+- “모른다”와 “아직 모른다”는 다르다
+- 재판단과 판단 변경은 다르다
+- 사용자 주장과 검증된 사실은 다르다
+- 불필요한 AI 호출도 시스템의 낭비다
+- 자동 테스트가 통과해도 설계 구멍은 존재할 수 있다
+- 실제 사용자는 개발자가 예상한 방식으로만 행동하지 않는다
 
 ---
 
-## 14. API Documentation
-
-서버 실행 후:
+# 현재 상태
 
 ```text
-http://127.0.0.1:8000/docs
+Version: 1.0.0-rc1
+Stage: Release Candidate
 ```
 
-FastAPI Swagger UI에서 API를 직접 테스트할 수 있습니다.
+1차 개발 범위의 기능 구현은 완료했고,  
+현재 단계는 **실제 사람과 실제 외부 환경에서 사용해보며 검증하는 단계**입니다.
 
 ---
 
-## 15. Tests
-
-```bash
-cd backend
-python -m pytest -q
-```
-
-현재 개발 스냅샷 기준:
-
-```text
-38 passed
-```
-
-이는 현재 작성된 자동 테스트 38개가 통과했다는 의미이며, 전체 시스템의 절대적인 정확성이나 실제 AI 판단 품질을 보장한다는 의미는 아닙니다.
-
----
-
-## 16. Current Status
-
-현재 단계:
-
-```text
-Backend Core     █████████░  ~90%
-Architecture     ████████░░  ~80%
-User Product     ██████░░░░  ~55-60%
-Deployment       ████░░░░░░  ~45%
-```
-
-현재 프로젝트는 백엔드 핵심 판단 구조를 구축하고 실제 사용자 경험으로 넘어가기 전 검증 중인 단계입니다.
-
----
-
-## 17. Known Limitations
-
-현재 명확히 알려진 제한 사항:
-
-* 실제 외부 출처 검증 엔진 미완성
-* Semantic Evidence Cross-check 미완성
-* 실제 OpenAI API 기반 대규모 판단 품질 검증 미완료
-* 사용자 인증 / 접근제어 미완성
-* Grace Period 기능 미구현
-* Frontend 미구현
-* Production migration / monitoring 미완성
-* 운영 환경 보안 검증 미완료
-
-이 프로젝트는 이러한 한계를 숨기지 않고 개발 과정에서 지속적으로 수정하는 것을 원칙으로 합니다.
-
----
-
-## 18. Development Principle
-
-이 프로젝트는 다음 두 문장을 중심 철학으로 사용합니다.
+# Core Philosophy
 
 > **완벽을 증명하는 시스템이 아니라, 변화할 수 있음을 증명하는 시스템.**
 
 > **행위 권한 없는 지능은 결국 조언에 머문다.**
 
-목표는 완벽한 AI를 선언하는 것이 아닙니다.
+그리고 이 프로젝트에서 말하는 성장은:
 
-목표는:
-
-```text
-판단할 수 있고
-↓
-틀릴 수 있으며
-↓
-그 이유를 추적할 수 있고
-↓
-더 나은 근거를 받아들이며
-↓
-판단을 수정할 수 있고
-↓
-권한이 있을 때만 행동할 수 있는
-```
-
-시스템을 구축하는 것입니다.
-
----
-
-## 19. Repository Status
-
-This repository is currently maintained as a **private development repository**.
-
-Public release, licensing, external contribution policy, and production deployment policies have not yet been finalized.
+> **더 이상 틀리지 않게 되는 것이 아니라, 틀렸음을 더 빨리 발견하고 더 잘 바꿀 수 있게 되는 것.**
