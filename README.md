@@ -1,4 +1,4 @@
-# AI Judgment System
+# AI Judgment System(Jiwoo)
 
 사람은 생각보다 많은 시간을 **확인하는 데** 씁니다.
 
