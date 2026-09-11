@@ -1,4 +1,4 @@
-# AI Judgment System — 1.0.0-rc6
+# AI Judgment System(Jiwoo) — 1.0.0-rc6
 
 > **확실한 것은 분명하게, 확실하지 않은 것은 확실하지 않다고 남긴다.**
 >
