@@ -1,0 +1,37 @@
+services:
+  app:
+    build: .
+    ports:
+      - "8000:8000"
+
+    environment:
+      DATABASE_URL: postgresql+psycopg://postgres:postgres@db:5432/ai_judgment
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+
+    depends_on:
+      db:
+        condition: service_healthy
+
+    restart: unless-stopped
+
+  db:
+    image: postgres:17-alpine
+
+    environment:
+      POSTGRES_DB: ai_judgment
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d ai_judgment"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
