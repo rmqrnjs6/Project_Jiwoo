@@ -3,35 +3,36 @@ services:
     build: .
     ports:
       - "8000:8000"
-
     environment:
-      DATABASE_URL: postgresql+psycopg://postgres:postgres@db:5432/ai_judgment
-      OPENAI_API_KEY: ${OPENAI_API_KEY}
-
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-ai_judgment}:${POSTGRES_PASSWORD:-ai_judgment}@db:5432/${POSTGRES_DB:-ai_judgment}
+      RELEASE_PROFILE: ${RELEASE_PROFILE:-V1}
+      OPENAI_MODEL: ${OPENAI_MODEL:-gpt-5.6-luna}
+      OPENAI_TIMEOUT_SECONDS: ${OPENAI_TIMEOUT_SECONDS:-30}
+      OPENAI_MAX_RETRIES: ${OPENAI_MAX_RETRIES:-1}
+      OPENAI_MAX_OUTPUT_TOKENS: ${OPENAI_MAX_OUTPUT_TOKENS:-1800}
+      OPENAI_REASONING_EFFORT: ${OPENAI_REASONING_EFFORT:-low}
+      OPENAI_MAX_INPUT_CHARS: ${OPENAI_MAX_INPUT_CHARS:-50000}
+      OPENAI_MAX_EVIDENCE_ITEMS: ${OPENAI_MAX_EVIDENCE_ITEMS:-25}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
     depends_on:
       db:
         condition: service_healthy
-
     restart: unless-stopped
 
   db:
     image: postgres:17-alpine
-
     environment:
-      POSTGRES_DB: ai_judgment
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-
+      POSTGRES_DB: ${POSTGRES_DB:-ai_judgment}
+      POSTGRES_USER: ${POSTGRES_USER:-ai_judgment}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-ai_judgment}
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-
+      - ai_judgment_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d ai_judgment"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-ai_judgment} -d ${POSTGRES_DB:-ai_judgment}"]
       interval: 5s
       timeout: 5s
       retries: 10
-
     restart: unless-stopped
 
 volumes:
-  postgres_data:
+  ai_judgment_data:
