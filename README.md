@@ -1,8 +1,8 @@
 # AI Judgment System
 
-**AI Judgment System(지우)**은 여러 주장과 근거를 한곳에서 정리하고, 현재 확인 가능한 자료를 기준으로 판단 결과와 그 변화 과정을 관리하는 프로젝트입니다.
+**AI Judgment System(지우)**은 여러 주장과 근거를 한곳에서 정리하고,<br>현재 확인 가능한 자료를 기준으로 판단 결과와 그 변화 과정을 관리하는 프로젝트입니다.
 
-인터넷에서 하나의 이슈를 확인할 때 여러 출처를 반복해서 찾아보고, 서로 다른 내용을 비교하고, 새로운 정보가 나오면 다시 확인해야 하는 경우가 있습니다. 이 프로젝트는 이 과정을 하나의 흐름으로 관리할 수 있도록 구성했습니다.
+인터넷에서 하나의 이슈를 확인할 때 여러 출처를 반복해서 찾아보고, 서로 다른 내용을 비교하고,<br>새로운 정보가 나오면 다시 확인해야 하는 경우가 있습니다.<br>이 프로젝트는 이 과정을 하나의 흐름으로 관리할 수 있도록 구성했습니다.
 
 ---
 
@@ -178,7 +178,7 @@ AI-Judgment-System/
    └─ backend/
 ```
 
-기능별 폴더 구조는 코드 확인과 업로드에 사용하고, `tools/assemble_runtime.py`가 실제 실행에 필요한 기존 `backend/app + frontend` 형태를 자동으로 조립합니다.
+기능별 폴더 구조는 코드 확인과 업로드에 사용하고, 각 기능 별 폴더 안에 Readme 파일을 추가하여 오인 방지를 최소화 하였습니다.
 
 ---
 
@@ -248,7 +248,7 @@ python tools\assemble_runtime.py
 Copy-Item .env.example .env
 ```
 
-필요하면 `.env`에 OpenAI API Key를 입력합니다.
+필요 시, `.env`에 OpenAI API Key를 입력합니다.
 
 ```env
 OPENAI_API_KEY=
@@ -270,7 +270,7 @@ API Docs: http://localhost:8000/docs
 Ready:    http://localhost:8000/ready
 ```
 
-`compose.yaml`의 `restart: unless-stopped` 설정으로 Docker Engine이 다시 시작되면 컨테이너도 다시 시작할 수 있습니다. Windows 로그인 시 Docker Desktop 자동 시작 옵션을 함께 사용하면 됩니다.
+`compose.yaml`의 `restart: unless-stopped` 설정으로 Docker Engine이 다시 시작되면 컨테이너도 다시 시작할 수 있습니다.<br>Windows 로그인 시 Docker Desktop 자동 시작 옵션을 함께 사용하면 됩니다.
 
 정지:
 
