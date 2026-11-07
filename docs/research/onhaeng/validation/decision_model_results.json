@@ -1,0 +1,121 @@
+{
+  "scope": "독립 결정 규칙의 합성 입력 테스트(모의 시험)",
+  "out_of_scope": "실제 예약 작업, ChatGPT 모델 준수, 사용자 행동, 사용자 알림 수신",
+  "total": 16,
+  "passed": 16,
+  "failed": 0,
+  "cases": [
+    {
+      "id": "R-01",
+      "name": "관찰 불가",
+      "expected": "hold_unverified",
+      "actual": "hold_unverified",
+      "status": "PASS"
+    },
+    {
+      "id": "R-02",
+      "name": "검증 전",
+      "expected": "hold_unverified",
+      "actual": "hold_unverified",
+      "status": "PASS"
+    },
+    {
+      "id": "R-03",
+      "name": "위험 우선",
+      "expected": "hold_high_risk",
+      "actual": "hold_high_risk",
+      "status": "PASS"
+    },
+    {
+      "id": "R-04",
+      "name": "감시-유의미 변화",
+      "expected": "report_change",
+      "actual": "report_change",
+      "status": "PASS"
+    },
+    {
+      "id": "R-05",
+      "name": "감시-변화 없음",
+      "expected": "quiet",
+      "actual": "quiet",
+      "status": "PASS"
+    },
+    {
+      "id": "R-06",
+      "name": "감시-기보고",
+      "expected": "quiet",
+      "actual": "quiet",
+      "status": "PASS"
+    },
+    {
+      "id": "R-07",
+      "name": "동일 실패 반복",
+      "expected": "reframe_problem",
+      "actual": "reframe_problem",
+      "status": "PASS"
+    },
+    {
+      "id": "R-08",
+      "name": "지원-재확인 전",
+      "expected": "test_or_recheck",
+      "actual": "test_or_recheck",
+      "status": "PASS"
+    },
+    {
+      "id": "R-09",
+      "name": "지원-증상 개선",
+      "expected": "symptom_improved",
+      "actual": "symptom_improved",
+      "status": "PASS"
+    },
+    {
+      "id": "R-10",
+      "name": "지원-원인 해결",
+      "expected": "cause_resolved",
+      "actual": "cause_resolved",
+      "status": "PASS"
+    },
+    {
+      "id": "R-11",
+      "name": "쓰기-미승인",
+      "expected": "draft_only",
+      "actual": "draft_only",
+      "status": "PASS"
+    },
+    {
+      "id": "R-12",
+      "name": "쓰기-권한 없음",
+      "expected": "draft_only",
+      "actual": "draft_only",
+      "status": "PASS"
+    },
+    {
+      "id": "R-13",
+      "name": "쓰기-실패",
+      "expected": "write_failed",
+      "actual": "write_failed",
+      "status": "PASS"
+    },
+    {
+      "id": "R-14",
+      "name": "쓰기-재조회 미확인",
+      "expected": "write_unverified",
+      "actual": "write_unverified",
+      "status": "PASS"
+    },
+    {
+      "id": "R-15",
+      "name": "쓰기-검증됨",
+      "expected": "write_verified",
+      "actual": "write_verified",
+      "status": "PASS"
+    },
+    {
+      "id": "R-16",
+      "name": "분류 오류",
+      "expected": "invalid_domain",
+      "actual": "invalid_domain",
+      "status": "PASS"
+    }
+  ]
+}
