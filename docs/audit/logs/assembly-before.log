@@ -1,0 +1,46 @@
+test_dangling_symlink_is_rejected_without_creating_target (test_assemble_runtime.AssembleRuntimeTests.test_dangling_symlink_is_rejected_without_creating_target) ... FAIL
+test_existing_directory_is_rejected_and_contents_preserved (test_assemble_runtime.AssembleRuntimeTests.test_existing_directory_is_rejected_and_contents_preserved) ... FAIL
+test_existing_file_is_rejected_and_preserved (test_assemble_runtime.AssembleRuntimeTests.test_existing_file_is_rejected_and_preserved) ... ERROR
+test_fresh_output_copies_runtime_sources_without_changes (test_assemble_runtime.AssembleRuntimeTests.test_fresh_output_copies_runtime_sources_without_changes) ... ok
+
+======================================================================
+ERROR: test_existing_file_is_rejected_and_preserved (test_assemble_runtime.AssembleRuntimeTests.test_existing_file_is_rejected_and_preserved)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/c9cbd49fcde6/Project_Jiwoo/tools/tests/test_assemble_runtime.py", line 32, in test_existing_file_is_rejected_and_preserved
+    runtime.assemble(output)
+  File "/workspace/scratch/c9cbd49fcde6/Project_Jiwoo/tools/assemble_runtime.py", line 50, in assemble
+    shutil.rmtree(output)
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/shutil.py", line 759, in rmtree
+    _rmtree_safe_fd(stack, onexc)
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/shutil.py", line 703, in _rmtree_safe_fd
+    onexc(func, path, err)
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/shutil.py", line 686, in _rmtree_safe_fd
+    with os.scandir(topfd) as scandir_it:
+         ^^^^^^^^^^^^^^^^^
+NotADirectoryError: [Errno 20] Not a directory: PosixPath('/tmp/tmp0kyrl49w/notes.txt')
+
+======================================================================
+FAIL: test_dangling_symlink_is_rejected_without_creating_target (test_assemble_runtime.AssembleRuntimeTests.test_dangling_symlink_is_rejected_without_creating_target)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/c9cbd49fcde6/Project_Jiwoo/tools/tests/test_assemble_runtime.py", line 40, in test_dangling_symlink_is_rejected_without_creating_target
+    with self.assertRaises(FileExistsError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: FileExistsError not raised
+
+======================================================================
+FAIL: test_existing_directory_is_rejected_and_contents_preserved (test_assemble_runtime.AssembleRuntimeTests.test_existing_directory_is_rejected_and_contents_preserved)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/c9cbd49fcde6/Project_Jiwoo/tools/tests/test_assemble_runtime.py", line 23, in test_existing_directory_is_rejected_and_contents_preserved
+    with self.assertRaises(FileExistsError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: FileExistsError not raised
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.016s
+
+FAILED (failures=2, errors=1)
+Runtime assembled at: /tmp/tmpc2le0o4a/absent
+Runtime assembled at: /tmp/tmpx8z7drqk/user-work

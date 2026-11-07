@@ -223,6 +223,10 @@ AI-Judgment-System/
 python tools\assemble_runtime.py
 ```
 
+출력 경로가 이미 존재하면 기존 작업을 보호하기 위해 중단합니다. 다시 조립할 때는
+`python tools/assemble_runtime.py --output .runtime-build-review-2`처럼 새 경로를 지정하세요.
+기존 출력 폴더는 자동 삭제하지 않습니다. Docker의 새 이미지 빌드에서는 `/app`을 생성합니다.
+
 기본 출력 위치:
 
 ```text
