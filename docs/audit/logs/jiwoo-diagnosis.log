@@ -1,0 +1,92 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.14, pytest-8.4.1, pluggy-1.7.0 -- /workspace/scratch/c9cbd49fcde6/.venv/bin/python
+cachedir: .pytest_cache
+rootdir: /workspace/scratch/c9cbd49fcde6/jiwoo-baseline/backend
+plugins: anyio-4.16.0
+collecting ... collected 77 items
+
+tests/test_api.py::test_case_evidence_judgment_and_history_flow PASSED
+tests/test_api.py::test_pending_requires_waiting_for PASSED
+tests/test_clarity_freedom_ux.py::test_frontend_centers_current_clarity_and_lower_information_load PASSED
+tests/test_clarity_freedom_ux.py::test_frontend_builds_shareable_summary_without_new_api_call PASSED
+tests/test_evidence_workspace.py::test_frontend_exposes_recommended_evidence_workspace PASSED
+tests/test_evidence_workspace.py::test_demo_candidate_batch_has_exactly_one_representative_and_visible_scores PASSED
+tests/test_evidence_workspace.py::test_candidate_adoption_is_idempotent_and_demo_is_blocked_from_real_judgment PASSED
+tests/test_evidence_workspace.py::test_real_discovery_requires_api_key_when_not_configured PASSED
+tests/test_evidence_workspace.py::test_openai_discovery_provider_uses_web_search_and_does_not_store_response PASSED
+tests/test_evidence_workspace.py::test_candidate_score_is_bounded_below_one PASSED
+tests/test_friendly_memory_ux.py::test_frontend_uses_calm_human_language_and_memory_oriented_timeline PASSED
+tests/test_friendly_memory_ux.py::test_timeline_case_creation_is_human_readable PASSED
+tests/test_frontend.py::test_frontend_index_and_assets_are_served PASSED
+tests/test_frontend.py::test_case_list_endpoint_supports_frontend_navigation PASSED
+tests/test_frontend.py::test_app_alias_serves_same_frontend PASSED
+tests/test_hardening.py::test_manual_judgment_rejects_position_contradiction_and_records_origin PASSED
+tests/test_hardening.py::test_database_constraint_rejects_invalid_judgment_even_if_service_is_bypassed PASSED
+tests/test_hardening.py::test_source_claim_is_explicitly_unverified_and_capped_until_assessed PASSED
+tests/test_hardening.py::test_history_rows_cannot_be_updated_or_deleted_through_orm PASSED
+tests/test_hardening.py::test_case_delete_is_restricted_while_history_exists PASSED
+tests/test_history_semantics.py::test_duplicate_evidence_is_detected_without_adding_second_evidence PASSED
+tests/test_history_semantics.py::test_identical_judgment_is_reaffirmed_not_revised PASSED
+tests/test_history_semantics.py::test_case_and_history_response_datetimes_are_explicit_utc PASSED
+tests/test_history_semantics.py::test_whitespace_only_case_and_evidence_are_rejected PASSED
+tests/test_history_semantics.py::test_changed_reliability_is_revised_not_reaffirmed PASSED
+tests/test_judgment_engine.py::test_automatic_judgment_creates_pending_position_and_evidence_trace PASSED
+tests/test_judgment_engine.py::test_rejudgment_changes_position_and_links_previous_judgment PASSED
+tests/test_judgment_engine.py::test_engine_rejects_inconsistent_resolved_state PASSED
+tests/test_judgment_engine.py::test_real_provider_path_without_api_key_returns_503 PASSED
+tests/test_openai_runtime.py::test_ai_status_does_not_perform_live_network_check_without_key PASSED
+tests/test_openai_runtime.py::test_openai_structured_response_path_creates_judgment_and_disables_storage PASSED
+tests/test_openai_runtime.py::test_timeout_is_504_retryable_and_preserved_in_history PASSED
+tests/test_openai_runtime.py::test_rate_limit_is_exposed_as_429_without_raw_exception_text PASSED
+tests/test_openai_runtime.py::test_model_cannot_omit_or_invent_evidence_assessment_ids PASSED
+tests/test_openai_runtime.py::test_missing_structured_output_is_invalid_response PASSED
+tests/test_permission_action.py::test_v1_locks_permission_action_feature_and_records_history PASSED
+tests/test_permission_action.py::test_v15_default_policy_blocks_execution_and_preserves_case PASSED
+tests/test_permission_action.py::test_scope_denied_even_when_execution_is_enabled PASSED
+tests/test_permission_action.py::test_allowed_latest_resolved_action_executes_and_is_audited PASSED
+tests/test_permission_action.py::test_stale_judgment_cannot_execute_even_with_permission PASSED
+tests/test_permission_action.py::test_pending_judgment_cannot_execute_even_with_permission_and_scope PASSED
+tests/test_permission_action.py::test_invalid_parameters_are_blocked_without_side_effect PASSED
+tests/test_release_and_composer.py::test_v1_release_locks_contextual_nudge_and_records_block PASSED
+tests/test_release_and_composer.py::test_release_endpoint_exposes_profile_and_feature_snapshot PASSED
+tests/test_release_and_composer.py::test_v2_unlocks_soft_nudge_and_composer_weaves_it_inline PASSED
+tests/test_release_and_composer.py::test_composer_exposes_reevaluation_notice_after_revision PASSED
+tests/test_release_and_composer.py::test_v1_locks_response_composer_even_when_internal_code_exists PASSED
+tests/test_release_and_composer.py::test_locked_v2_data_is_not_exposed_through_case_read PASSED
+tests/test_release_and_composer.py::test_composer_says_reaffirmed_when_reevaluation_keeps_same_state PASSED
+tests/test_release_candidate.py::test_ready_checks_database_without_requiring_ai_configuration PASSED
+tests/test_release_candidate.py::test_system_status_is_safe_and_does_not_claim_paid_live_check PASSED
+tests/test_release_candidate.py::test_openai_request_has_cost_caps_and_storage_disabled PASSED
+tests/test_release_candidate.py::test_paid_live_smoke_script_is_disabled_by_default PASSED
+tests/test_release_candidate.py::test_invalid_reasoning_effort_is_rejected_before_any_request PASSED
+tests/test_release_candidate.py::test_decision_snapshot_includes_cost_sensitive_model_options PASSED
+tests/test_release_candidate.py::test_oversized_ai_input_is_blocked_before_paid_request PASSED
+tests/test_reliability_engine.py::test_metadata_reliability_scores_primary_official_above_ai_unknown PASSED
+tests/test_reliability_engine.py::test_reliability_reassessment_is_append_only_and_identical_result_is_reaffirmed PASSED
+tests/test_reliability_engine.py::test_higher_reliability_new_evidence_can_drive_rejudgment_reversal PASSED
+tests/test_source_verification.py::test_local_source_check_never_promotes_public_url_to_verified PASSED
+tests/test_source_verification.py::test_rechecking_same_source_is_reaffirmed_not_revised PASSED
+tests/test_source_verification.py::test_private_or_local_url_is_invalidated_without_network_access PASSED
+tests/test_source_verification.py::test_verified_source_lifts_metadata_cap_and_next_judgment_uses_source_verified_trigger PASSED
+tests/test_source_verification.py::test_source_verification_history_is_queryable PASSED
+tests/test_source_verification.py::test_partial_source_review_causes_source_reviewed_not_new_evidence_trigger PASSED
+tests/test_support_engine.py::test_ambiguous_emotional_text_generates_soft_nudge_and_history PASSED
+tests/test_support_engine.py::test_declared_roleplay_is_not_treated_as_personal_state PASSED
+tests/test_support_engine.py::test_safety_nudge_cannot_be_subtle PASSED
+tests/test_support_engine.py::test_support_schema_rejects_diagnosis_field PASSED
+tests/test_support_engine.py::test_real_support_provider_without_api_key_returns_503 PASSED
+tests/test_system_health.py::test_decision_snapshot_records_what_was_seen PASSED
+tests/test_system_health.py::test_same_decision_context_reuses_existing_judgment_without_second_ai_call PASSED
+tests/test_system_health.py::test_new_evidence_changes_fingerprint_and_triggers_real_reevaluation PASSED
+tests/test_system_health.py::test_rule_version_change_forces_reevaluation_even_when_evidence_is_same PASSED
+tests/test_system_health.py::test_model_change_forces_reevaluation_without_evidence_change PASSED
+tests/test_system_health.py::test_force_true_allows_user_requested_recheck_even_without_change PASSED
+tests/test_system_health.py::test_user_timeline_hides_internal_reevaluation_noise_and_explains_saved_call PASSED
+
+=============================== warnings summary ===============================
+../../.venv/lib/python3.12/site-packages/starlette/testclient.py:51
+  /workspace/scratch/c9cbd49fcde6/.venv/lib/python3.12/site-packages/starlette/testclient.py:51: DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.
+    _PortalFactoryType = Callable[[], AbstractContextManager[anyio.abc.BlockingPortal]]
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+======================== 77 passed, 1 warning in 3.89s =========================

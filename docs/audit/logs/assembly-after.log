@@ -1,0 +1,9 @@
+test_dangling_symlink_is_rejected_without_creating_target (test_assemble_runtime.AssembleRuntimeTests.test_dangling_symlink_is_rejected_without_creating_target) ... ok
+test_existing_directory_is_rejected_and_contents_preserved (test_assemble_runtime.AssembleRuntimeTests.test_existing_directory_is_rejected_and_contents_preserved) ... ok
+test_existing_file_is_rejected_and_preserved (test_assemble_runtime.AssembleRuntimeTests.test_existing_file_is_rejected_and_preserved) ... ok
+test_fresh_output_copies_runtime_sources_without_changes (test_assemble_runtime.AssembleRuntimeTests.test_fresh_output_copies_runtime_sources_without_changes) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.008s
+
+OK

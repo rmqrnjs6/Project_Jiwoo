@@ -45,9 +45,16 @@ def copy_required(src: Path, dst: Path) -> None:
 
 
 def assemble(output: Path) -> None:
+    # A dangling symlink does not exist() but still names a user-owned path.
+    # Reject before resolve() so it cannot redirect assembly to another location.
+    if output.is_symlink():
+        raise FileExistsError(f"Output path already exists: {output}. Use a new directory.")
     output = output.resolve()
     if output.exists():
-        shutil.rmtree(output)
+        raise FileExistsError(f"Output path already exists: {output}. Use a new directory.")
+
+    # Claim a fresh directory before copying; never clear or reuse existing output.
+    output.mkdir(parents=True, exist_ok=False)
 
     app_dir = output / "backend" / "app"
     tests_dir = output / "backend" / "tests"
@@ -95,7 +102,7 @@ def main() -> None:
     parser.add_argument(
         "--output",
         default=str(ROOT / ".runtime-build"),
-        help="Output directory for the runnable backend/frontend layout.",
+        help="New output directory for the runnable backend/frontend layout; existing paths are refused.",
     )
     args = parser.parse_args()
     assemble(Path(args.output))
