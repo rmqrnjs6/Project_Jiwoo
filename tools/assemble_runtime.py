@@ -44,8 +44,30 @@ def copy_required(src: Path, dst: Path) -> None:
     shutil.copy2(src, dst)
 
 
+def validated_output_path(output: Path) -> Path:
+    """Keep generated output from replacing repository sources or parent folders."""
+    requested = output.expanduser().absolute()
+    resolved = requested.resolve()
+    project_root = ROOT.resolve()
+    build_root = project_root / ".runtime-build"
+
+    if resolved == project_root or project_root.is_relative_to(resolved):
+        raise ValueError(
+            f"Unsafe runtime output: {resolved} is the repository or an ancestor"
+        )
+    if requested.is_relative_to(project_root) and not resolved.is_relative_to(project_root):
+        raise ValueError(
+            f"Unsafe runtime output: {requested} resolves outside the repository"
+        )
+    if resolved.is_relative_to(project_root) and not resolved.is_relative_to(build_root):
+        raise ValueError(
+            f"Unsafe runtime output: {resolved} overlaps repository source files"
+        )
+    return resolved
+
+
 def assemble(output: Path) -> None:
-    output = output.resolve()
+    output = validated_output_path(output)
     if output.exists():
         shutil.rmtree(output)
 
